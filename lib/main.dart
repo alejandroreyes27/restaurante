@@ -14,7 +14,7 @@ class RestauranteApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Restaurante',
+      title: 'San Angel',
       theme: ThemeData(primarySwatch: Colors.deepOrange, useMaterial3: true),
       initialRoute: '/',
       routes: {

@@ -114,32 +114,35 @@ class _HomeScreenState extends State<HomeScreen> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           int crossAxisCount = 2;
-          double horizontalPadding = 8;
-          if (constraints.maxWidth >= 1100) {
+          double childAspectRatio = 0.85;
+          if (constraints.maxWidth >= 1300) {
+            crossAxisCount = 5;
+            childAspectRatio = 0.78;
+          } else if (constraints.maxWidth >= 1100) {
             crossAxisCount = 4;
-            horizontalPadding = 48;
+            childAspectRatio = 0.80;
           } else if (constraints.maxWidth >= 900) {
             crossAxisCount = 3;
-            horizontalPadding = 32;
+            childAspectRatio = 0.82;
           } else if (constraints.maxWidth >= 600) {
             crossAxisCount = 2;
-            horizontalPadding = 16;
+            childAspectRatio = 0.85;
           } else {
             crossAxisCount = 2;
-            horizontalPadding = 8;
+            childAspectRatio = 0.90;
           }
           return Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: horizontalPadding,
-              vertical: 16,
+              horizontal: 0, // Elimina el padding horizontal
+              vertical: 0,   // Elimina el padding vertical
             ),
             child: GridView.builder(
               itemCount: products.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: crossAxisCount,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.85,
+                crossAxisSpacing: 4, // Reduce el espacio entre columnas
+                mainAxisSpacing: 4,  // Reduce el espacio entre filas
+                childAspectRatio: childAspectRatio,
               ),
               itemBuilder: (context, index) {
                 return ProductCard(product: products[index]);
