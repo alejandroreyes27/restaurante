@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../data/products_data.dart';
 import '../widgets/product_card.dart';
 import '../widgets/adaptive_nav.dart';
+import 'package:url_launcher/url_launcher.dart'; // Cambiado a url_launcher.dart
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,84 +35,85 @@ class _HomeScreenState extends State<HomeScreen> {
     final isMobile = MediaQuery.of(context).size.width < 900;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Restaurante'),
+        title: const Text('Restaurante San Angel'),
         centerTitle: true,
-        actions:
-            isMobile
-                ? null
-                : [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 24),
-                    child: Center(
-                      child: SizedBox(
-                        height: 48,
-                        child: AdaptiveNavigation(
-                          selectedIndex: _selectedIndex,
-                          onDestinationSelected: _onNavTap,
-                          isMobile: false,
-                        ),
+        backgroundColor: const Color.fromARGB(255, 252, 252, 252),
+        actions: isMobile
+            ? null
+            : [
+                Padding(
+                  padding: const EdgeInsets.only(right: 24),
+                  child: Center(
+                    child: SizedBox(
+                      height: 48,
+                      child: AdaptiveNavigation(
+                        selectedIndex: _selectedIndex,
+                        onDestinationSelected: _onNavTap,
+                        isMobile: false,
                       ),
                     ),
                   ),
-                ],
-      ),
-      drawer:
-          isMobile
-              ? Drawer(
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    DrawerHeader(
-                      decoration: const BoxDecoration(color: Colors.deepOrange),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          CircleAvatar(
-                            radius: 32,
-                            backgroundImage: NetworkImage(
-                              'https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg',
-                            ),
-                          ),
-                          SizedBox(height: 12),
-                          Text(
-                            'Restaurante Ejemplo',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.restaurant_menu),
-                      title: const Text('Menú'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        _onNavTap(0);
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.info_outline),
-                      title: const Text('Sobre Nosotros'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        _onNavTap(1);
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.contact_mail),
-                      title: const Text('Contáctenos'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        _onNavTap(2);
-                      },
-                    ),
-                  ],
                 ),
-              )
-              : null,
+              ],
+      ),
+      drawer: isMobile
+          ? Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  DrawerHeader(
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 163, 9, 9),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        CircleAvatar(
+                          radius: 32,
+                          backgroundImage: NetworkImage(
+                            'https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg',
+                          ),
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          'Restaurante',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 254, 254, 254),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.restaurant_menu),
+                    title: const Text('Menú'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      _onNavTap(0);
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.info_outline),
+                    title: const Text('Sobre Nosotros'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      _onNavTap(1);
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.contact_mail),
+                    title: const Text('Contáctenos'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      _onNavTap(2);
+                    },
+                  ),
+                ],
+              ),
+            )
+          : null,
       body: LayoutBuilder(
         builder: (context, constraints) {
           int crossAxisCount = 2;
@@ -131,17 +134,15 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisCount = 2;
             childAspectRatio = 0.90;
           }
+
           return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 0, // Elimina el padding horizontal
-              vertical: 0,   // Elimina el padding vertical
-            ),
+            padding: const EdgeInsets.only(bottom: 8.0),
             child: GridView.builder(
               itemCount: products.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: crossAxisCount,
-                crossAxisSpacing: 4, // Reduce el espacio entre columnas
-                mainAxisSpacing: 4,  // Reduce el espacio entre filas
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
                 childAspectRatio: childAspectRatio,
               ),
               itemBuilder: (context, index) {
@@ -151,14 +152,34 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
-      bottomNavigationBar:
-          isMobile
-              ? AdaptiveNavigation(
-                selectedIndex: _selectedIndex,
-                onDestinationSelected: _onNavTap,
-                isMobile: true,
-              )
-              : null,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF25D366),
+        onPressed: () async {
+          final whatsappUrl = Uri.parse(
+            "https://wa.me/3126566205?text=${Uri.encodeComponent("Hola, me gustaría hacer una reserva.")}",
+          );
+          if (await canLaunchUrl(whatsappUrl)) {
+            await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("No se pudo abrir WhatsApp")),
+            );
+          }
+        },
+        tooltip: 'Reserva por WhatsApp',
+        child: const FaIcon(
+          FontAwesomeIcons.whatsapp,
+          color: Colors.white,
+          size: 32,
+        ),
+      ),
+      bottomNavigationBar: isMobile
+          ? AdaptiveNavigation(
+              selectedIndex: _selectedIndex,
+              onDestinationSelected: _onNavTap,
+              isMobile: true,
+            )
+          : null,
     );
   }
 }
